@@ -21,7 +21,7 @@ enum Tile {BLANK, RED, BLUE};
 struct Line {
   int num_red;
   int num_blue;
-  Tile *tiles[4];
+  Tile *tiles[SIZE];
 };
 
 int main() {
@@ -33,25 +33,93 @@ int main() {
   for (int i = 0; i < SIZE; i++)
     cin >> read[i];
   cout << "\n";
-  // for (int i = 0; i < SIZE; i++)
-  //  cout << read[i] << "\n";
 
   // initialize the stuctures and convert to enums
+  // Tile board[SIZE][SIZE];
   struct Line *row[SIZE];
   struct Line *col[SIZE]; 
+ 
+  int blank_left = SIZE * SIZE;
+
   for (int i = 0; i < SIZE; i++) {
     string str_row = read[i];
+    cout << str_row << "\n";
     for (int j = 0; j < SIZE; j++) {
       Tile new_tile;
       if (str_row.at(j) == '0') { // Blank
         new_tile = BLANK;
-        row[i]->tiles[j] = &new_tile;
-      } else if (str_row.at(j) == 'b') // Blue
+      } else if (str_row.at(j) == 'b') { // Blue
         new_tile = BLUE;
-      else if (str_row.at(j) == 'r') // Red
+        row[i]->num_blue++;
+        col[j]->num_blue++;
+        blank_left--;
+      } else if (str_row.at(j) == 'r') { // Red
         new_tile = RED;
-    
+        row[i]->num_red++;
+        col[j]->num_red++;
+        blank_left--;
+      } else {
+        cout << "Error\n";
+        exit(1);
+      }
+      row[i]->tiles[j] = &new_tile;
+      col[j]->tiles[i] = &new_tile;
     }
+  }
+
+  /* while (blank_left > 0) {
+    for (int i = 0; i < SIZE; i++) {
+      Line *cur_row = row[i];
+      if (cur_row->num_red == SIZE / 2 && cur_row->num_blue < SIZE / 2) {
+        for (int j = 0; j < SIZE; j++) {
+          if (cur_row->tiles[j] == BLANK) {
+            cur_row->tiles[j] == BLUE;
+            cur_row->num_blue++;
+            col[j]->num_blue++;
+            blank_left--;
+          }
+        }
+      } else if (cur_row->num_blue == SIZE / 2 && cur_row->num_red < SIZE / 2) {
+        for (int j = 0; j < SIZE; j++) {
+          if (cur_row->tiles[j] == BLANK) {
+            cur_row->tiles[j] == RED;
+            cur_row->num_red++;
+            col[j]->num_red++;
+            blank_left--;
+          }
+        }
+      }
+    }
+    for (int i = 0; i < SIZE; i++) {
+      Line *cur_col = col[i];
+      if (cur_col->num_red == SIZE / 2 && cur_col->num_blue < SIZE / 2) {
+        for (int j = 0; j < SIZE; j++) {
+          if (cur_col->tiles[j] == BLANK) {
+            cur_col->tiles[j] == BLUE;
+            cur_col->num_blue++;
+            row[j]->num_blue++;
+            blank_left--;
+          }
+        }
+      } else if (cur_col->num_blue == SIZE / 2 && cur_col->num_red < SIZE / 2) {
+        for (int j = 0; j < SIZE; j++) {
+          if (cur_col->tiles[j] == BLANK) {
+            cur_col->tiles[j] == RED;
+            cur_col->num_red++;
+            row[j]->num_red++;
+            blank_left--;
+          }
+        }
+      }
+    }
+  } */
+
+  // Print
+  for (int i = 0; i < SIZE; i++) {
+    for (int j = 0; j < SIZE; j++) {
+      cout << "BRUH";
+    }
+    cout << "\n";
   }
   
   // End and calculate timer data
