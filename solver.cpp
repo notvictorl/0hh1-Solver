@@ -25,6 +25,7 @@ struct Line {
 };
 
 void print_board(Line *row[]);
+bool half_colored(Line *row[]);
 
 int main() {
   string read[SIZE];
@@ -155,3 +156,30 @@ void print_board(Line *row[]) {
     cout << "\n";
   }
 }
+
+// bool half_colored(Line *row[]) {
+      Line *cr = row[i]; // Current Row
+
+//   if (cr->num_blue == SIZE / 2) {
+//     for (int j = 0; j < SIZE; j++) {
+//       Tile *curr = cr->tiles[j];
+//       if (*curr == BLANK) {
+//         *curr = RED;
+//         cr->num_red++;
+//         col[j]->num_red++;
+//         blank_left--;
+//       }
+//     }
+//   } else if (cr->num_red == SIZE / 2) {
+//     for (int j = 0; j < SIZE; j++) {
+//       Tile *curr = cr->tiles[j];
+//       if (*curr == BLANK) {
+//         *curr = BLUE;
+//         cr->num_blue++;
+//         col[j]->num_blue++;
+//         blank_left--;
+//       }
+//     }
+//   } 
+//   return 0;
+// }
