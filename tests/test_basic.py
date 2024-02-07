@@ -23,5 +23,3 @@ def test_correct():
         # Check
         assert solution in result.read()
         print("Test Case Passed")
-
-test_correct()
