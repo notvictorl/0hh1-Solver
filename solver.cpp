@@ -26,8 +26,6 @@ struct Line {
 
 void print_board(Line *row[]);
 
-bool half_colored(Line *line);
-
 int main() {
   string read[SIZE];
 
