@@ -50,6 +50,33 @@ int main() {
 
   int blank_left = SIZE * SIZE;
   
+  // Lambda functions
+  auto half_colored = [&] (Line *line) {
+    if (line->num_blue == SIZE / 2) {
+      for (int j = 0; j < SIZE; j++) {
+        Tile *curr = line->tiles[j];
+        if (*curr == BLANK) {
+          *curr = RED;
+          line->num_red++;
+          col[j]->num_red++;
+          blank_left--;
+          return true;
+        }
+      }
+    } else if (line->num_red == SIZE / 2) {
+      for (int j = 0; j < SIZE; j++) {
+        Tile *curr = line->tiles[j];
+        if (*curr == BLANK) {
+          *curr = BLUE;
+          line->num_blue++;
+          col[j]->num_blue++;
+          blank_left--;
+          return true;
+        }
+      } 
+    }
+  };
+
   for (int i = 0; i < SIZE; ++i) {
     string str_row = read[i];
     for (int j = 0; j < SIZE; ++j) {
