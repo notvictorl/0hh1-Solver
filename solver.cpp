@@ -182,7 +182,3 @@ void print_board(Line *row[]) {
     cout << "\n";
   }
 }
-
-bool half_colored(Line *line) {
-  
-}
