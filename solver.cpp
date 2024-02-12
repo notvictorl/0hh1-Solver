@@ -60,7 +60,6 @@ int main() {
           line->num_red++;
           col[j]->num_red++;
           blank_left--;
-          return true;
         }
       }
     } else if (line->num_red == SIZE / 2) {
@@ -71,9 +70,81 @@ int main() {
           line->num_blue++;
           col[j]->num_blue++;
           blank_left--;
-          return true;
         }
       } 
+    }
+  };
+
+  auto no_duplicates = [&] () {
+    bool change_found = false;
+    for (int i = 0; i < SIZE && !change_found; ++i) {
+      Line *cr = row[i];
+      if (cr->num_blue + cr->num_red == SIZE - 2) {
+        for (int j = 0; j < SIZE; ++j) {
+          Line *comp_row = row[j];
+          if (i != j && comp_row->num_blue + comp_row->num_red == SIZE) {
+            bool is_match = true;
+            for (int index = 0; index < SIZE && is_match; index++) {
+              if (*(cr->tiles[index]) != BLANK && *(cr->tiles[index]) != *(comp_row->tiles[index])) {
+                is_match = false;
+              }
+            }
+            if (is_match) {
+              cout << "found match\n";
+              for (int index = 0; index < SIZE; index++) {
+                if (*(cr->tiles[index]) == BLANK) {
+                  if (*(comp_row->tiles[index]) == BLUE) {
+                    *(cr->tiles[index]) = RED;
+                    cr->num_red++;
+                    col[index]->num_red++;
+                    blank_left--;
+                    change_found = true;
+                  } else {
+                    *(cr->tiles[index]) = BLUE;
+                    cr->num_blue++;
+                    col[index]->num_blue++;
+                    blank_left--;
+                    change_found = true;
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+      Line *cc = col[i];
+      if (cc->num_blue + cc->num_red == SIZE - 2) {
+        for (int j = 0; j < SIZE; ++j) {
+          Line *comp_col = col[j];
+          if (i != j && comp_col->num_blue + comp_col->num_red == SIZE) {
+            bool is_match = true;
+            for (int index = 0; index < SIZE && is_match; index++) {
+              if (*(cc->tiles[index]) != BLANK && *(cc->tiles[index]) != *(comp_col->tiles[index])) {
+                is_match = false;
+              }
+            }
+            if (is_match) {
+              for (int index = 0; index < SIZE; index++) {
+                if (*(cc->tiles[index]) == BLANK) {
+                  if (*(comp_col->tiles[index]) == BLUE) {
+                    *(cc->tiles[index]) = RED;
+                    cc->num_red++;
+                    row[index]->num_red++;
+                    blank_left--;
+                    change_found = true;
+                  } else {
+                    *(cc->tiles[index]) = BLUE;
+                    cc->num_blue++;
+                    row[index]->num_blue++;
+                    blank_left--;
+                    change_found = true;
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
     }
   };
 
@@ -106,54 +177,21 @@ int main() {
   print_board(row);
   
   while (blank_left > 0) {
+    bool changes_made = false;
     for (int i = 0; i < SIZE; i++) {
       Line *cr = row[i]; // Current Row
-      if (cr->num_blue == SIZE / 2) {
-        for (int j = 0; j < SIZE; j++) {
-          Tile *curr = cr->tiles[j];
-          if (*curr == BLANK) {
-            *curr = RED;
-            cr->num_red++;
-            col[j]->num_red++;
-            blank_left--;
-          }
-        }
-      } else if (cr->num_red == SIZE / 2) {
-        for (int j = 0; j < SIZE; j++) {
-          Tile *curr = cr->tiles[j];
-          if (*curr == BLANK) {
-            *curr = BLUE;
-            cr->num_blue++;
-            col[j]->num_blue++;
-            blank_left--;
-          }
-        }
-      }
-    }
-    for (int i = 0; i < SIZE; i++) {
       Line *cc = col[i]; // Current Column
-      if (cc->num_blue == SIZE / 2) {
-        for (int j = 0; j < SIZE; j++) {
-          Tile *curr = cc->tiles[j];
-          if (*curr == BLANK) {
-            *curr = RED;
-            cc->num_red++;
-            row[j]->num_red++;
-            blank_left--;
-          }
-        }
-      } else if (cc->num_red == SIZE / 2) {
-        for (int j = 0; j < SIZE; j++) {
-          Tile *curr = cc->tiles[j];
-          if (*curr == BLANK) {
-            *curr = BLUE;
-            cc->num_blue++;
-            row[j]->num_blue++;
-            blank_left--;
-          }
-        }
-      }
-    } 
+
+      half_colored(cr);
+      half_colored(cc);
+      /*if (!changes_made && (hc_flag1 || hc_flag2)) {
+        changes_made = true;
+      }*/
+    }
+    
+    if (changes_made) {
+      no_duplicates();
+    }
   }
 
   // Print

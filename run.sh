@@ -1,4 +1,4 @@
 #!/bin/bash
 cd "$(dirname "$0")"
-make solver.x
+make solver.out
 ./solver.x
