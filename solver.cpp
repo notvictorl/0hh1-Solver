@@ -51,28 +51,60 @@ int main() {
   int blank_left = SIZE * SIZE;
   
   // Lambda functions
-  auto half_colored = [&] (Line *line) {
-    if (line->num_blue == SIZE / 2) {
-      for (int j = 0; j < SIZE; j++) {
-        Tile *curr = line->tiles[j];
-        if (*curr == BLANK) {
-          *curr = RED;
-          line->num_red++;
-          col[j]->num_red++;
-          blank_left--;
+  // Note: for even more code optimization send boolean/enum for row/col
+  auto half_colored = [&] () {
+    bool ret = false;
+    for (int i = 0; i < SIZE; i++) {
+      Line* cr = row[i];
+      Line* cc = col[i];
+      if (cr->num_blue == SIZE / 2) {
+        for (int j = 0; j < SIZE; j++) {
+          Tile *curr = cr->tiles[j];
+          if (*curr == BLANK) {
+            *curr = RED;
+            cr->num_red++;
+            col[j]->num_red++;
+            blank_left--;
+            ret = true;
+          }
         }
+      } else if (cr->num_red == SIZE / 2) {
+        for (int j = 0; j < SIZE; j++) {
+          Tile *curr = cr->tiles[j];
+          if (*curr == BLANK) {
+            *curr = BLUE;
+            cr->num_blue++;
+            col[j]->num_blue++;
+            blank_left--;
+            ret = true;
+          }
+        } 
       }
-    } else if (line->num_red == SIZE / 2) {
-      for (int j = 0; j < SIZE; j++) {
-        Tile *curr = line->tiles[j];
-        if (*curr == BLANK) {
-          *curr = BLUE;
-          line->num_blue++;
-          col[j]->num_blue++;
-          blank_left--;
+      if (cc->num_blue == SIZE / 2) {
+        for (int j = 0; j < SIZE; j++) {
+          Tile *curr = cc->tiles[j];
+          if (*curr == BLANK) {
+            *curr = RED;
+            cc->num_red++;
+            row[j]->num_red++;
+            blank_left--;
+            ret = true;
+          }
         }
-      } 
+      } else if (cc->num_red == SIZE / 2) {
+        for (int j = 0; j < SIZE; j++) {
+          Tile *curr = cc->tiles[j];
+          if (*curr == BLANK) {
+            *curr = BLUE;
+            cc->num_blue++;
+            row[j]->num_blue++;
+            blank_left--;
+            ret = true;
+          }
+        } 
+      }
     }
+    return ret;
   };
 
   auto no_duplicates = [&] () {
@@ -178,20 +210,10 @@ int main() {
   
   while (blank_left > 0) {
     bool changes_made = false;
-    for (int i = 0; i < SIZE; i++) {
-      Line *cr = row[i]; // Current Row
-      Line *cc = col[i]; // Current Column
+    changes_made = half_colored();
 
-      half_colored(cr);
-      half_colored(cc);
-      /*if (!changes_made && (hc_flag1 || hc_flag2)) {
-        changes_made = true;
-      }*/
-    }
-    
-    if (changes_made) {
+    if (!changes_made)
       no_duplicates();
-    }
   }
 
   // Print
