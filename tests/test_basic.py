@@ -3,8 +3,8 @@ import sys
 import subprocess
 
 # Commands
-compile_cmd = "g++ solver.cpp -std=c++11 -o solver.x"
-run_cmd = "../solver.x < "
+compile_cmd = "g++ solver.cpp -std=c++11 -o solver.out"
+run_cmd = "../solver.out < "
 
 # Testcase
 testcase = "testcase.txt"

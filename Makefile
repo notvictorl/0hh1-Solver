@@ -1,2 +1,2 @@
-solver.x: solver.cpp
-	g++ solver.cpp -std=c++11 -o solver.x
+solver.out: solver.cpp
+	g++ solver.cpp -std=c++11 -o solver.out
