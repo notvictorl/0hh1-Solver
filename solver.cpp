@@ -139,7 +139,7 @@ int main() {
   chrono::duration<double> elapsed_seconds = end-start;
   time_t end_time = chrono::system_clock::to_time_t(end);
 
-  cout << "Elapsed Time: " << elapsed_seconds.count() << "s\n";  
+  cout << "Elapsed Time: " << elapsed_seconds.count() << "s\n";  // Less than 1 ms
 
   exit(0);
 }
