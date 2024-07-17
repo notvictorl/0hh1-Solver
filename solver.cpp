@@ -11,6 +11,7 @@
 #include <string>
 #include <time.h>
 #include <chrono>
+#include <pthread.h>
 
 #define SIZE 4
 
@@ -24,9 +25,15 @@ struct Line {
   Tile *tiles[SIZE];
 };
 
+struct Board {
+  Line *rows[SIZE];
+}
+
 void print_board(Line *row[]);
+Board input_board(string input[SIZE]);
 
 int main() {
+  Board board = new Board();
   string read[SIZE];
 
   // Testing with board sizes of 4x4
